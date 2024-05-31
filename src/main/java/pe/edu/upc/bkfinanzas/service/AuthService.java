@@ -38,6 +38,9 @@ public class AuthService {
                 .password(passwordEncoder.encode( request.getPassword()))
                 .nombres(request.getNombres())
                 .apellidos(request.getApellidos())
+                .dni(request.getDni())
+                .direccion(request.getDireccion())
+                .telefono(request.getTelefono())
                 .role(Role.USER)
                 .build();
 

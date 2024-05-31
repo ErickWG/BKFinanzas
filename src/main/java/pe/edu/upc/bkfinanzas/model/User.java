@@ -24,9 +24,14 @@ public class User implements UserDetails {
     Integer id;
     @Basic
     String username;
-    String apellidos;
     String nombres;
+    String apellidos;
+    String dni;
+    String direccion;
+    Integer telefono;
+
     String password; //si o si debe ser password para que el UserDetailsfuncione
+
     @Enumerated(EnumType.STRING)
     Role role;
     @Override
