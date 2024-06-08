@@ -34,4 +34,8 @@ public class ClienteController {
     public ResponseEntity<Cliente> elimina (@PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(clienteService.eliminar(id), HttpStatus.OK);
     }
+    @PutMapping
+    public ResponseEntity<Cliente> edita(@RequestBody Cliente cliente) throws Exception {
+        return new ResponseEntity<>(clienteService.modifica(cliente), HttpStatus.OK);
+    }
 }
