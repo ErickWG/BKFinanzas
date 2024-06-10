@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.bkfinanzas.model.Compra;
-import pe.edu.upc.bkfinanzas.model.Producto;
+import pe.edu.upc.bkfinanzas.model.*;
+import pe.edu.upc.bkfinanzas.repository.ClienteRepository;
+import pe.edu.upc.bkfinanzas.repository.ProductoRepository;
+import pe.edu.upc.bkfinanzas.repository.TipoCreditoRepository;
 import pe.edu.upc.bkfinanzas.service.CompraService;
 import pe.edu.upc.bkfinanzas.service.ProductoService;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,6 +20,15 @@ import java.util.List;
 public class CompraController {
     @Autowired
     public final CompraService compraService;
+
+    @Autowired
+    private ClienteRepository clienteRepo;
+
+    @Autowired
+    private TipoCreditoRepository tipoCreditoRepo;
+
+    @Autowired
+    private ProductoRepository productoRepo;
 
     public CompraController(CompraService compraService) {
         this.compraService = compraService;
@@ -40,8 +53,17 @@ public class CompraController {
         return new ResponseEntity<>(compraService.modifica(compra), HttpStatus.OK);
     }
 
+    @PostMapping("/registrar")
+    public ResponseEntity<Compra> registrarCompra(@RequestBody CompraDTO compraDTO) {
+        Cliente cliente = clienteRepo.findById(compraDTO.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));// Obtener cliente según la lógica de tu aplicación
+                TipoCredito tipoCred = tipoCreditoRepo.findById(compraDTO.getTipoCreditoId())
+                        .orElseThrow(() -> new RuntimeException("Tipo de crédito no encontrado"));// Obtener tipo de crédito según la lógica de tu aplicación
 
+                Compra comp = compraService.registrarCompra(cliente, tipoCred, compraDTO.getDetallesCompra());
 
+        return ResponseEntity.ok(comp);
+    }
 
 
 

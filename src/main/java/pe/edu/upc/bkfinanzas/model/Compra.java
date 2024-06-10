@@ -25,13 +25,18 @@ public class Compra {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "tipo_credito_id")
     public TipoCredito tipocredito;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public Cliente cliente;
 
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleCompra> detallesCompra = new ArrayList<>();
 
-    //@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<DetalleCompra> detallesCompra = new ArrayList<>();
+
+
+
+
 }
