@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CompraDTO {
     private Integer clienteId;
-    private Integer tipoCreditoId;
+    private TipoCreditoDTO tipoCredito;
     private List<DetalleCompraDTO> detallesCompra;
 
     public Integer getClienteId() {
@@ -15,12 +15,12 @@ public class CompraDTO {
         this.clienteId = clienteId;
     }
 
-    public Integer getTipoCreditoId() {
-        return tipoCreditoId;
+    public TipoCreditoDTO getTipoCredito() {
+        return tipoCredito;
     }
 
-    public void setTipoCreditoId(Integer tipoCreditoId) {
-        this.tipoCreditoId = tipoCreditoId;
+    public void setTipoCredito(TipoCreditoDTO tipoCredito) {
+        this.tipoCredito = tipoCredito;
     }
 
     public List<DetalleCompraDTO> getDetallesCompra() {

@@ -7,7 +7,7 @@ public class DetalleCompraDTO {
     public Integer getProductoId() {
         return productoId;
     }
-    
+
     public void setProductoId(Integer productoId) {
         this.productoId = productoId;
     }
@@ -19,5 +19,4 @@ public class DetalleCompraDTO {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
-
 }

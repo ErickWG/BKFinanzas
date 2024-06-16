@@ -56,11 +56,9 @@ public class CompraController {
     @PostMapping("/registrar")
     public ResponseEntity<Compra> registrarCompra(@RequestBody CompraDTO compraDTO) {
         Cliente cliente = clienteRepo.findById(compraDTO.getClienteId())
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));// Obtener cliente según la lógica de tu aplicación
-                TipoCredito tipoCred = tipoCreditoRepo.findById(compraDTO.getTipoCreditoId())
-                        .orElseThrow(() -> new RuntimeException("Tipo de crédito no encontrado"));// Obtener tipo de crédito según la lógica de tu aplicación
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-                Compra comp = compraService.registrarCompra(cliente, tipoCred, compraDTO.getDetallesCompra());
+        Compra comp = compraService.registrarCompra(cliente, compraDTO.getTipoCredito(), compraDTO.getDetallesCompra());
 
         return ResponseEntity.ok(comp);
     }

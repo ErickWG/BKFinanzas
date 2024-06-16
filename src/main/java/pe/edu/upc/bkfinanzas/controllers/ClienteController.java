@@ -23,6 +23,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Cliente> insert(@RequestBody Cliente cliente){
         return new ResponseEntity<>(clienteService.insert(cliente), HttpStatus.CREATED);
+
     }
 
     @GetMapping

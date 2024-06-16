@@ -61,7 +61,16 @@ public class CompraService {
     }
 
 
-    public Compra registrarCompra(Cliente cliente, TipoCredito tipoCredito, List<DetalleCompraDTO> detallesCompraDTO) {
+    public Compra registrarCompra(Cliente cliente, TipoCreditoDTO tipoCreditoDTO, List<DetalleCompraDTO> detallesCompraDTO) {
+        // Crear un nuevo TipoCredito a partir del DTO
+        TipoCredito tipoCredito = new TipoCredito();
+        tipoCredito.setTasaNum(tipoCreditoDTO.getTasaNum());
+        tipoCredito.setTasaText(tipoCreditoDTO.getTasaText());
+        tipoCredito.setCuotas(tipoCreditoDTO.getCuotas());
+        tipoCredito.setCapitalizacion(tipoCreditoDTO.getCapitalizacion());
+        tipoCreditoRepo.save(tipoCredito);
+
+        // Crear la compra
         Compra compra = new Compra();
         compra.setFecha(LocalDate.now());
         compra.setCliente(cliente);
@@ -79,13 +88,13 @@ public class CompraService {
             detalleCompra.setCantidad(detalleDTO.getCantidad());
             detalleCompra.setPrecioUnitario(producto.getPrecioventa());
             detalleCompra.setSubtotal(detalleDTO.getCantidad() * producto.getPrecioventa());
-            detalleCompra.setCompra(compra); // Establecer la referencia a la compra
+            detalleCompra.setCompra(compra);
 
             detallesCompra.add(detalleCompra);
             montoTotal += detalleCompra.getSubtotal();
         }
 
-        compra.setDetallesCompra(detallesCompra); // Establecer los detalles de compra en la compra
+        compra.setDetallesCompra(detallesCompra);
         compra.setMonto_total(montoTotal);
 
         return compraRepo.save(compra);
