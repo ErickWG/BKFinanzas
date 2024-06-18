@@ -64,5 +64,11 @@ public class CompraController {
     }
 
 
+    @GetMapping("/reporte")
+    public ResponseEntity<List<HistMovimientoDTO>> consultaReporteCompra() {
+        List<HistMovimientoDTO> reporte = compraService.consultaReporteCompra();
+        return new ResponseEntity<>(reporte, HttpStatus.OK);
+    }
+
 
 }

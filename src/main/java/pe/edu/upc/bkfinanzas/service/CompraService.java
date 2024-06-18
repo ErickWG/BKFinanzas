@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.bkfinanzas.model.*;
 import pe.edu.upc.bkfinanzas.repository.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompraService {
@@ -99,4 +99,26 @@ public class CompraService {
 
         return compraRepo.save(compra);
     }
+
+    public List<HistMovimientoDTO> consultaReporteCompra() {
+        List<Object[]> getReporteCompra = compraRepo.getReporteCompra();
+        List<HistMovimientoDTO> histMovimientoDTOs = new ArrayList<>();
+
+        for (Object[] result : getReporteCompra) {
+            HistMovimientoDTO dto = new HistMovimientoDTO();
+            dto.setNombrecompleto((String) result[0]);
+            dto.setFecha(((Date) result[1]).toLocalDate()); // Convertir java.sql.Date a java.time.LocalDate
+            dto.setDescripcion((String) result[2]);
+            dto.setSubtotal((Double) result[3]);
+            dto.setTasa_text((String) result[4]);
+            dto.setTasa_num((Double) result[5]);
+            dto.setCuotas((Integer) result[6]);
+            dto.setCapitalizacion((Integer) result[7]);
+            histMovimientoDTOs.add(dto);
+        }
+
+        return histMovimientoDTOs;
+    }
+
+
 }
