@@ -13,6 +13,53 @@ public class HistMovimientoDTO {
     public Integer cuotas;
     public Integer capitalizacion;
 
+    public Double getRenta() {
+        return renta;
+    }
+
+    public void setRenta(Double renta) {
+        this.renta = renta;
+    }
+
+    public Double getTotalAPagar() {
+        return totalAPagar;
+    }
+
+    public void setTotalAPagar(Double totalAPagar) {
+        this.totalAPagar = totalAPagar;
+    }
+
+    private Double renta;
+    private Double totalAPagar;
+
+    public Integer getDiasTrasladar() {
+        return diasTrasladar;
+    }
+
+    public void setDiasTrasladar(Integer diasTrasladar) {
+        this.diasTrasladar = diasTrasladar;
+    }
+
+    public Double getValorFuturo() {
+        return valorFuturo;
+    }
+
+    public void setValorFuturo(Double valorFuturo) {
+        this.valorFuturo = valorFuturo;
+    }
+
+    public Double getInteres() {
+        return interes;
+    }
+
+    public void setInteres(Double interes) {
+        this.interes = interes;
+    }
+
+    private Integer diasTrasladar; // Nuevo campo
+    private Double valorFuturo; // Nuevo campo
+    private Double interes; // Nuevo campo
+
     public String getNombrecompleto() {
         return nombrecompleto;
     }

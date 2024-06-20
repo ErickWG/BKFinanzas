@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.bkfinanzas.model.*;
 import pe.edu.upc.bkfinanzas.repository.*;
 
+import java.io.Console;
+import java.time.temporal.ChronoUnit;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -114,6 +117,88 @@ public class CompraService {
             dto.setTasa_num((Double) result[5]);
             dto.setCuotas((Integer) result[6]);
             dto.setCapitalizacion((Integer) result[7]);
+            histMovimientoDTOs.add(dto);
+        }
+
+        return histMovimientoDTOs;
+    }
+
+
+
+
+    private double calcularValorFuturo(double cuota, double tasa, int diasTrasladar, String tipoTasa) {
+        if (tipoTasa.equals("Efectiva")) {
+            return cuota * Math.pow((1 + tasa), (double) diasTrasladar / 30);
+        } else if (tipoTasa.equals("Nominal")) {
+            return cuota * Math.pow((1 + tasa / 30), diasTrasladar);
+        }
+        return cuota; // Default caso no reconocido
+    }
+
+    private int calcularDiasTrasladar(LocalDate fechaCompra, int fechaPagoMensual) {
+        LocalDate fechaPago = fechaCompra.withDayOfMonth(fechaPagoMensual);
+        if (fechaCompra.isAfter(fechaPago) || fechaCompra.isEqual(fechaPago)) {
+            fechaPago = fechaPago.plusMonths(1);
+        }
+        return (int) ChronoUnit.DAYS.between(fechaCompra, fechaPago);
+    }
+
+    private double calcularRenta(double cuota, double tasa, int cuotas) {
+        double tep = tasa;
+        double factor = Math.pow(1 + tep, cuotas);
+        return cuota * ((tep * factor) / (factor - 1));
+    }
+
+    public List<HistMovimientoDTO> consultaReporteCompraPorCliente(Integer clienteId) {
+        List<Object[]> getReporteCompra = compraRepo.getReporteCompraPorCliente(clienteId);
+        List<HistMovimientoDTO> histMovimientoDTOs = new ArrayList<>();
+
+        Cliente cliente = clienteRepo.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        int fechaPagoMensual = cliente.getFecha_pago_mensual();
+
+        for (Object[] result : getReporteCompra) {
+            HistMovimientoDTO dto = new HistMovimientoDTO();
+            dto.setNombrecompleto((String) result[0]);
+            LocalDate fechaCompra = ((Date) result[1]).toLocalDate();
+            dto.setFecha(fechaCompra);
+            dto.setDescripcion((String) result[2]);
+            double subtotal = ((Number) result[3]).doubleValue();
+            double tasa_num = ((Number) result[5]).doubleValue();
+            int cuotas = ((Number) result[6]).intValue();
+            dto.setSubtotal(subtotal);
+            dto.setTasa_text((String) result[4]);
+            dto.setTasa_num(tasa_num);
+            dto.setCuotas(cuotas);
+            dto.setCapitalizacion(((Number) result[7]).intValue());
+
+            // Calcular el "Nº días trasladar"
+            int diasTrasladar = calcularDiasTrasladar(fechaCompra, fechaPagoMensual);
+            dto.setDiasTrasladar(diasTrasladar);
+
+            // Inicializar valorFuturo
+            double valorFuturo = 0.0;
+
+            // Calcular el valor futuro dependiendo de la tasa y cuotas
+            if (cuotas == 1) {
+                valorFuturo = calcularValorFuturo(subtotal, tasa_num / 100, diasTrasladar, dto.getTasa_text());
+                dto.setValorFuturo(valorFuturo);
+            } else if (dto.getTasa_text().equals("Efectiva")) {
+                double renta = calcularRenta(subtotal, tasa_num / 100, cuotas);
+                dto.setRenta(renta);
+                double totalAPagar = renta * cuotas;
+                dto.setTotalAPagar(totalAPagar);
+                valorFuturo = totalAPagar; // Usar renta como valor futuro
+            }
+
+            // Calcular el interés solo si valorFuturo ha sido establecido
+            if (valorFuturo != 0.0) {
+                double interes = valorFuturo - subtotal;
+                System.out.println("valorFuturo: " + valorFuturo);
+                System.out.println("subtotal: " + subtotal);
+
+                dto.setInteres(interes);
+            }
+
             histMovimientoDTOs.add(dto);
         }
 
