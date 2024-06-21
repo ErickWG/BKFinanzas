@@ -126,13 +126,14 @@ public class CompraService {
 
 
 
-    private double calcularValorFuturo(double cuota, double tasa, int diasTrasladar, String tipoTasa) {
+    private double calcularValorFuturo(double cuota, double tasa, int diasTrasladar, String tipoTasa, int capitalizacion) {
         if (tipoTasa.equals("Efectiva")) {
             return cuota * Math.pow((1 + tasa), (double) diasTrasladar / 30);
         } else if (tipoTasa.equals("Nominal")) {
-            return cuota * Math.pow((1 + tasa / 30), diasTrasladar);
+            return cuota * Math.pow((1 + (tasa/(30/capitalizacion))), (double) diasTrasladar/capitalizacion);
         }
         return cuota; // Default caso no reconocido
+
     }
 
     private int calcularDiasTrasladar(LocalDate fechaCompra, int fechaPagoMensual) {
@@ -147,6 +148,10 @@ public class CompraService {
         double tep = tasa;
         double factor = Math.pow(1 + tep, cuotas);
         return cuota * ((tep * factor) / (factor - 1));
+    }
+
+    private double calcularTEP(double tasaNominal, int m) {
+        return Math.pow(1 + tasaNominal / m, m) - 1;
     }
 
     public List<HistMovimientoDTO> consultaReporteCompraPorCliente(Integer clienteId) {
@@ -165,11 +170,12 @@ public class CompraService {
             double subtotal = ((Number) result[3]).doubleValue();
             double tasa_num = ((Number) result[5]).doubleValue();
             int cuotas = ((Number) result[6]).intValue();
+            int capitalizacion = ((Number) result[7]).intValue();
             dto.setSubtotal(subtotal);
             dto.setTasa_text((String) result[4]);
             dto.setTasa_num(tasa_num);
             dto.setCuotas(cuotas);
-            dto.setCapitalizacion(((Number) result[7]).intValue());
+            dto.setCapitalizacion(capitalizacion);
 
             // Calcular el "Nº días trasladar"
             int diasTrasladar = calcularDiasTrasladar(fechaCompra, fechaPagoMensual);
@@ -180,22 +186,26 @@ public class CompraService {
 
             // Calcular el valor futuro dependiendo de la tasa y cuotas
             if (cuotas == 1) {
-                valorFuturo = calcularValorFuturo(subtotal, tasa_num / 100, diasTrasladar, dto.getTasa_text());
+                valorFuturo = calcularValorFuturo(subtotal, tasa_num / 100, diasTrasladar, dto.getTasa_text(), capitalizacion);
                 dto.setValorFuturo(valorFuturo);
-            } else if (dto.getTasa_text().equals("Efectiva")) {
-                double renta = calcularRenta(subtotal, tasa_num / 100, cuotas);
+            } else {
+                double tep;
+                if (dto.getTasa_text().equals("Nominal")) {
+                    // Convertir tasa nominal a tasa efectiva usando capitalización
+                    tep = calcularTEP(tasa_num / 100, 30/capitalizacion);
+                } else {
+                    tep = tasa_num / 100;
+                }
+                double renta = calcularRenta(subtotal, tep, cuotas);
                 dto.setRenta(renta);
                 double totalAPagar = renta * cuotas;
                 dto.setTotalAPagar(totalAPagar);
-                valorFuturo = totalAPagar; // Usar renta como valor futuro
+                valorFuturo = totalAPagar; // Usar total a pagar como valor futuro
             }
 
             // Calcular el interés solo si valorFuturo ha sido establecido
             if (valorFuturo != 0.0) {
                 double interes = valorFuturo - subtotal;
-                System.out.println("valorFuturo: " + valorFuturo);
-                System.out.println("subtotal: " + subtotal);
-
                 dto.setInteres(interes);
             }
 
