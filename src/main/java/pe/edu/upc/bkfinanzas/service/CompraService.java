@@ -222,6 +222,64 @@ public class CompraService {
 
         return histMovimientoDTOs;
     }
+    public List<HistMovimientoDTO> consultaReporteCompraTodosClientes() {
+        List<Object[]> getReporteCompra = compraRepo.getReporteCompra();
+        List<HistMovimientoDTO> histMovimientoDTOs = new ArrayList<>();
+
+        for (Object[] result : getReporteCompra) {
+            HistMovimientoDTO dto = new HistMovimientoDTO();
+            dto.setNombrecompleto((String) result[0]);
+            LocalDate fechaCompra = ((Date) result[1]).toLocalDate();
+            dto.setFecha(fechaCompra);
+            dto.setDescripcion((String) result[2]);
+            double subtotal = ((Number) result[3]).doubleValue();
+            double tasa_num = ((Number) result[5]).doubleValue();
+            int cuotas = ((Number) result[6]).intValue();
+            int capitalizacion = ((Number) result[7]).intValue();
+            dto.setSubtotal(subtotal);
+            dto.setTasa_text((String) result[4]);
+            dto.setTasa_num(tasa_num);
+            dto.setCuotas(cuotas);
+            dto.setCapitalizacion(capitalizacion);
+
+            // Calcular el "Nº días trasladar"
+            // Aquí no tenemos el pago mensual del cliente, así que se necesita una forma estándar de calcularlo.
+            int diasTrasladar = calcularDiasTrasladar(fechaCompra, 30); // Ejemplo de pago mensual fijo en el día 30
+            dto.setDiasTrasladar(diasTrasladar);
+
+            // Inicializar valorFuturo
+            double valorFuturo = 0.0;
+
+            // Calcular el valor futuro dependiendo de la tasa y cuotas
+            if (cuotas == 1) {
+                valorFuturo = calcularValorFuturo(subtotal, tasa_num / 100, diasTrasladar, dto.getTasa_text(), capitalizacion);
+                dto.setValorFuturo(valorFuturo);
+            } else {
+                double tep;
+                if (dto.getTasa_text().equals("Nominal")) {
+                    // Convertir tasa nominal a tasa efectiva usando capitalización
+                    tep = calcularTEP(tasa_num / 100, 30 / capitalizacion);
+                } else {
+                    tep = tasa_num / 100;
+                }
+                double renta = calcularRenta(subtotal, tep, cuotas);
+                dto.setRenta(renta);
+                double totalAPagar = renta * cuotas;
+                dto.setTotalAPagar(totalAPagar);
+                valorFuturo = totalAPagar; // Usar total a pagar como valor futuro
+            }
+
+            // Calcular el interés solo si valorFuturo ha sido establecido
+            if (valorFuturo != 0.0) {
+                double interes = valorFuturo - subtotal;
+                dto.setInteres(interes);
+            }
+
+            histMovimientoDTOs.add(dto);
+        }
+
+        return histMovimientoDTOs;
+    }
 
 
 }

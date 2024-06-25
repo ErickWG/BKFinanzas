@@ -20,6 +20,17 @@ public interface CompraRepository extends JpaRepository<Compra,Integer> {
             "GROUP BY nombrecompleto, c.fecha, tp.tasa_text, tp.tasa_num, tp.cuotas, tp.capitalizacion", nativeQuery = true)
     List<Object[]> getReporteCompra();
 
+    @Query(value = "SELECT CONCAT(u.nombres, ' ', u.apellidos) AS nombrecompleto, c.fecha, STRING_AGG(pr.descripcion, ', ') AS descripcion, SUM(dc.subtotal) AS subtotal, tp.tasa_text, CAST(tp.tasa_num AS DOUBLE PRECISION) AS tasa_num, tp.cuotas, tp.capitalizacion " +
+            "FROM compra c " +
+            "INNER JOIN cliente cl ON c.cliente_id = cl.id " +
+            "INNER JOIN userfn u ON cl.user_id = u.id " +
+            "INNER JOIN tipo_credito tp ON c.tipo_credito_id = tp.id " +
+            "INNER JOIN detalle_compra dc ON c.id = dc.compra_id " +
+            "INNER JOIN producto pr ON dc.producto_id = pr.id " +
+            "GROUP BY nombrecompleto, c.fecha, tp.tasa_text, tasa_num, tp.cuotas, tp.capitalizacion", nativeQuery = true)
+    List<Object[]> getReporteCompraTodosClientes();
+
+
 
     @Query(value = "SELECT CONCAT(u.nombres, ' ', u.apellidos) AS nombrecompleto, c.fecha, STRING_AGG(pr.descripcion, ', ') AS descripcion, SUM(dc.subtotal) AS subtotal, tp.tasa_text, CAST(tp.tasa_num AS DOUBLE PRECISION) AS tasa_num, tp.cuotas, tp.capitalizacion " +
             "FROM compra c " +
