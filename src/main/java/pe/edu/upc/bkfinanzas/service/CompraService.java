@@ -100,8 +100,16 @@ public class CompraService {
         compra.setDetallesCompra(detallesCompra);
         compra.setMonto_total(montoTotal);
 
+        // Restar el monto total al crédito del cliente
+        if (cliente.getLimite_credito() < montoTotal) {
+            throw new RuntimeException("Crédito insuficiente para realizar la compra");
+        }
+        cliente.setLimite_credito(cliente.getLimite_credito() - montoTotal);
+        clienteRepo.save(cliente); // Guardar los cambios en el cliente
+
         return compraRepo.save(compra);
     }
+
 
     public List<HistMovimientoDTO> consultaReporteCompra() {
         List<Object[]> getReporteCompra = compraRepo.getReporteCompra();
