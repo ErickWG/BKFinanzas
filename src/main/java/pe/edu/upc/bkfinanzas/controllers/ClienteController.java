@@ -13,6 +13,7 @@ import pe.edu.upc.bkfinanzas.repository.UserRepository;
 import pe.edu.upc.bkfinanzas.service.ClienteService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cliente")
@@ -32,7 +33,15 @@ public class ClienteController {
     public ClienteController(ClienteService clienteService) {
         this.clienteService = clienteService;
     }
-
+    @GetMapping("/{username}")
+    public ResponseEntity<Optional<Cliente>> buscarPorUsername(@PathVariable String username) {
+        Optional<Cliente> cliente = clienteService.buscarPorUsername(username);
+        if (cliente.isPresent()) {
+            return new ResponseEntity<>(cliente, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+        }
+    }
     @PostMapping
     public ResponseEntity<Cliente> insert(@RequestBody Cliente cliente){
         return new ResponseEntity<>(clienteService.insert(cliente), HttpStatus.CREATED);

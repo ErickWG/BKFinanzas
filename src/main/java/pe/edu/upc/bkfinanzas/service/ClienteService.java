@@ -7,6 +7,8 @@ import pe.edu.upc.bkfinanzas.model.User;
 import pe.edu.upc.bkfinanzas.repository.ClienteRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ClienteService {
     @Autowired
@@ -15,6 +17,7 @@ public class ClienteService {
     public ClienteService(ClienteRepository clienteRepo) {
         this.clienteRepo = clienteRepo;
     }
+    public Optional<Cliente> buscarPorUsername(String username){return clienteRepo.findClienteByUser_Username(username);}
 
     //Insertar
     public Cliente insert (Cliente cliente){ return clienteRepo.save(cliente);}
