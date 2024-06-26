@@ -2,6 +2,7 @@ package pe.edu.upc.bkfinanzas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.bkfinanzas.model.Compra;
 import pe.edu.upc.bkfinanzas.model.HistMovimiento;
 import pe.edu.upc.bkfinanzas.model.HistMovimientoDTO;
 import pe.edu.upc.bkfinanzas.repository.HistMovimientoRepository;
@@ -17,6 +18,13 @@ public class HistMovimientoService {
     @Autowired
     public HistMovimientoService(HistMovimientoRepository histMovimientoRepository) {
         this.histMovimientoRepository = histMovimientoRepository;
+    }
+
+    public List<HistMovimiento> lsHistorial() {
+        return histMovimientoRepository.findAll();
+    }
+    public List<HistMovimiento> lsHistorialPorId(Integer id) {
+        return histMovimientoRepository.findByClienteId(id);
     }
 
     public List<HistMovimientoDTO> getHistMovimientosDTOByUsername(String username) {

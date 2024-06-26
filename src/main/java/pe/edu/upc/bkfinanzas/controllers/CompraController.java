@@ -64,13 +64,13 @@ public class CompraController {
     }
 
 
-    @GetMapping("/reporte")
-    public ResponseEntity<List<HistMovimientoDTO>> consultaReporteCompra() {
-        List<HistMovimientoDTO> reporte = compraService.consultaReporteCompra();
-        return new ResponseEntity<>(reporte, HttpStatus.OK);
-    }
+//    @GetMapping("/reporte")
+//    public ResponseEntity<List<HistMovimientoDTO>> consultaReporteCompra() {
+//        List<HistMovimientoDTO> reporte = compraService.consultaReporteCompra();
+//        return new ResponseEntity<>(reporte, HttpStatus.OK);
+//    }
 
-    @GetMapping("/reporte/{clienteId}")
+/*    @GetMapping("/reporte/{clienteId}")
     public ResponseEntity<List<HistMovimientoDTO>> consultaReporteCompraPorCliente(@PathVariable Integer clienteId) {
         List<HistMovimientoDTO> reporte = compraService.consultaReporteCompraPorCliente(clienteId);
         return new ResponseEntity<>(reporte, HttpStatus.OK);
@@ -81,5 +81,5 @@ public class CompraController {
     public ResponseEntity<List<HistMovimientoDTO>> consultaReporteCompraTodosClientes() {
         List<HistMovimientoDTO> reporte = compraService.consultaReporteCompraTodosClientes();
         return new ResponseEntity<>(reporte, HttpStatus.OK);
-    }
+    }*/
 }

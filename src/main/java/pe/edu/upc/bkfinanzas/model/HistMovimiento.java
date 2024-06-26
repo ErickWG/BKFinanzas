@@ -27,6 +27,23 @@ public class HistMovimiento {
     private Integer cuotas;
     private Integer capitalizacion;
 
+    @Column(nullable = true)
+    private Double renta;
+
+    @Column(nullable = true)
+    private Double totalAPagar;
+
+    @Column(nullable = true)
+    private Integer diasTrasladar;
+
+    @Column(nullable = true)
+    private Double valorFuturo;
+
+    @Column(nullable = true)
+    private Double interes;
+
+    private String estado;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "cliente_id")
@@ -37,4 +54,3 @@ public class HistMovimiento {
     @JoinColumn(name = "compra_id")
     private Compra compra;
 }
-

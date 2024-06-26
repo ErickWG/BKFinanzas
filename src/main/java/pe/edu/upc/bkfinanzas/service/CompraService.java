@@ -1,16 +1,12 @@
 package pe.edu.upc.bkfinanzas.service;
 
-import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.bkfinanzas.model.*;
 import pe.edu.upc.bkfinanzas.repository.*;
 
-import java.io.Console;
-import java.time.temporal.ChronoUnit;
-
-import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +27,16 @@ public class CompraService {
     @Autowired
     private TipoCreditoRepository tipoCreditoRepo;
 
-    public CompraService(CompraRepository compraRepo, ProductoRepository productoRepo, DetalleCompraRepository detalleCompraRepo, ClienteRepository clienteRepo, TipoCreditoRepository tipoCreditoRepo) {
+    @Autowired
+    private final HistMovimientoRepository histMovimientoRepo;
+
+    public CompraService(CompraRepository compraRepo, ProductoRepository productoRepo, DetalleCompraRepository detalleCompraRepo, ClienteRepository clienteRepo, TipoCreditoRepository tipoCreditoRepo, HistMovimientoRepository histMovimientoRepo) {
         this.compraRepo = compraRepo;
         this.productoRepo = productoRepo;
         this.detalleCompraRepo = detalleCompraRepo;
         this.clienteRepo = clienteRepo;
         this.tipoCreditoRepo = tipoCreditoRepo;
+        this.histMovimientoRepo = histMovimientoRepo;
     }
 
     // Insertar
@@ -51,7 +51,7 @@ public class CompraService {
 
     // Eliminar
     public Compra eliminar(Integer id) throws Exception {
-        Compra m = compraRepo.findById(id).orElseThrow(() -> new OpenApiResourceNotFoundException("No se encontró el ID " + id));
+        Compra m = compraRepo.findById(id).orElseThrow(() -> new RuntimeException("No se encontró el ID " + id));
         compraRepo.delete(m);
         return m;
     }
@@ -59,11 +59,11 @@ public class CompraService {
     // Modificar
     public Compra modifica(Compra compra) throws Exception {
         Compra com = compraRepo.findById(compra.getId())
-                .orElseThrow(() -> new OpenApiResourceNotFoundException("Id de la compra no existe"));
+                .orElseThrow(() -> new RuntimeException("Id de la compra no existe"));
         return compraRepo.save(compra);
     }
 
-
+    // Registrar compra y guardar historial de movimientos
     public Compra registrarCompra(Cliente cliente, TipoCreditoDTO tipoCreditoDTO, List<DetalleCompraDTO> detallesCompraDTO) {
         // Crear un nuevo TipoCredito a partir del DTO
         TipoCredito tipoCredito = new TipoCredito();
@@ -81,6 +81,7 @@ public class CompraService {
 
         List<DetalleCompra> detallesCompra = new ArrayList<>();
         double montoTotal = 0.0;
+        List<String> descripciones = new ArrayList<>();
 
         for (DetalleCompraDTO detalleDTO : detallesCompraDTO) {
             Producto producto = productoRepo.findById(detalleDTO.getProductoId())
@@ -95,6 +96,9 @@ public class CompraService {
 
             detallesCompra.add(detalleCompra);
             montoTotal += detalleCompra.getSubtotal();
+
+            // Añadir la descripción del producto al historial
+            descripciones.add(detalleDTO.getCantidad() + " " + producto.getDescripcion());
         }
 
         compra.setDetallesCompra(detallesCompra);
@@ -107,41 +111,58 @@ public class CompraService {
         cliente.setLimite_credito(cliente.getLimite_credito() - montoTotal);
         clienteRepo.save(cliente); // Guardar los cambios en el cliente
 
-        return compraRepo.save(compra);
-    }
+        // Guardar la compra
+        compraRepo.save(compra);
 
+        // Calcular los valores adicionales
+        int diasTrasladar = calcularDiasTrasladar(compra.getFecha(), cliente.getFecha_pago_mensual());
+        Double renta = null;
+        Double totalAPagar = null;
+        Double valorFuturo = null;
+        Double interes = null;
 
-    public List<HistMovimientoDTO> consultaReporteCompra() {
-        List<Object[]> getReporteCompra = compraRepo.getReporteCompra();
-        List<HistMovimientoDTO> histMovimientoDTOs = new ArrayList<>();
-
-        for (Object[] result : getReporteCompra) {
-            HistMovimientoDTO dto = new HistMovimientoDTO();
-            dto.setNombrecompleto((String) result[0]);
-            dto.setFecha(((Date) result[1]).toLocalDate()); // Convertir java.sql.Date a java.time.LocalDate
-            dto.setDescripcion((String) result[2]);
-            dto.setSubtotal((Double) result[3]);
-            dto.setTasa_text((String) result[4]);
-            dto.setTasa_num((Double) result[5]);
-            dto.setCuotas((Integer) result[6]);
-            dto.setCapitalizacion((Integer) result[7]);
-            histMovimientoDTOs.add(dto);
+        if (tipoCredito.getCuotas() == 1) {
+            valorFuturo = calcularValorFuturo(montoTotal, tipoCredito.getTasaNum() / 100, diasTrasladar, tipoCredito.getTasaText(), tipoCredito.getCapitalizacion());
+            interes = valorFuturo - montoTotal;
+        } else {
+            double tep = tipoCredito.getTasaText().equals("Nominal") ? calcularTEP(tipoCredito.getTasaNum() / 100, 30 / tipoCredito.getCapitalizacion()) : tipoCredito.getTasaNum() / 100;
+            renta = calcularRenta(montoTotal, tep, tipoCredito.getCuotas());
+            totalAPagar = renta * tipoCredito.getCuotas();
+            valorFuturo = totalAPagar;
+            interes = valorFuturo - montoTotal;
         }
 
-        return histMovimientoDTOs;
+        // Crear y guardar el historial de movimientos
+        HistMovimiento histMovimiento = new HistMovimiento();
+        histMovimiento.setNombrecompleto(cliente.getUser().getUsername());
+        histMovimiento.setFecha(compra.getFecha());
+        histMovimiento.setDescripcion(String.join(", ", descripciones));
+        histMovimiento.setSubtotal(montoTotal);
+        histMovimiento.setTasa_text(tipoCredito.getTasaText());
+        histMovimiento.setTasa_num(tipoCredito.getTasaNum());
+        histMovimiento.setCuotas(tipoCredito.getCuotas());
+        histMovimiento.setCapitalizacion(tipoCredito.getCapitalizacion());
+        histMovimiento.setCliente(cliente);
+        histMovimiento.setCompra(compra);
+        histMovimiento.setEstado("Pendiente");
+        histMovimiento.setDiasTrasladar(diasTrasladar);
+        histMovimiento.setRenta(renta);
+        histMovimiento.setTotalAPagar(totalAPagar);
+        histMovimiento.setValorFuturo(valorFuturo);
+        histMovimiento.setInteres(interes);
+
+        histMovimientoRepo.save(histMovimiento);
+
+        return compra;
     }
-
-
-
 
     private double calcularValorFuturo(double cuota, double tasa, int diasTrasladar, String tipoTasa, int capitalizacion) {
         if (tipoTasa.equals("Efectiva")) {
             return cuota * Math.pow((1 + tasa), (double) diasTrasladar / 30);
         } else if (tipoTasa.equals("Nominal")) {
-            return cuota * Math.pow((1 + (tasa/(30/capitalizacion))), (double) diasTrasladar/capitalizacion);
+            return cuota * Math.pow((1 + (tasa / (30 / capitalizacion))), (double) diasTrasladar / capitalizacion);
         }
         return cuota; // Default caso no reconocido
-
     }
 
     private int calcularDiasTrasladar(LocalDate fechaCompra, int fechaPagoMensual) {
@@ -161,125 +182,4 @@ public class CompraService {
     private double calcularTEP(double tasaNominal, int m) {
         return Math.pow(1 + tasaNominal / m, m) - 1;
     }
-
-    public List<HistMovimientoDTO> consultaReporteCompraPorCliente(Integer clienteId) {
-        List<Object[]> getReporteCompra = compraRepo.getReporteCompraPorCliente(clienteId);
-        List<HistMovimientoDTO> histMovimientoDTOs = new ArrayList<>();
-
-        Cliente cliente = clienteRepo.findById(clienteId).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        int fechaPagoMensual = cliente.getFecha_pago_mensual();
-
-        for (Object[] result : getReporteCompra) {
-            HistMovimientoDTO dto = new HistMovimientoDTO();
-            dto.setNombrecompleto((String) result[0]);
-            LocalDate fechaCompra = ((Date) result[1]).toLocalDate();
-            dto.setFecha(fechaCompra);
-            dto.setDescripcion((String) result[2]);
-            double subtotal = ((Number) result[3]).doubleValue();
-            double tasa_num = ((Number) result[5]).doubleValue();
-            int cuotas = ((Number) result[6]).intValue();
-            int capitalizacion = ((Number) result[7]).intValue();
-            dto.setSubtotal(subtotal);
-            dto.setTasa_text((String) result[4]);
-            dto.setTasa_num(tasa_num);
-            dto.setCuotas(cuotas);
-            dto.setCapitalizacion(capitalizacion);
-
-            // Calcular el "Nº días trasladar"
-            int diasTrasladar = calcularDiasTrasladar(fechaCompra, fechaPagoMensual);
-            dto.setDiasTrasladar(diasTrasladar);
-
-            // Inicializar valorFuturo
-            double valorFuturo = 0.0;
-
-            // Calcular el valor futuro dependiendo de la tasa y cuotas
-            if (cuotas == 1) {
-                valorFuturo = calcularValorFuturo(subtotal, tasa_num / 100, diasTrasladar, dto.getTasa_text(), capitalizacion);
-                dto.setValorFuturo(valorFuturo);
-            } else {
-                double tep;
-                if (dto.getTasa_text().equals("Nominal")) {
-                    // Convertir tasa nominal a tasa efectiva usando capitalización
-                    tep = calcularTEP(tasa_num / 100, 30/capitalizacion);
-                } else {
-                    tep = tasa_num / 100;
-                }
-                double renta = calcularRenta(subtotal, tep, cuotas);
-                dto.setRenta(renta);
-                double totalAPagar = renta * cuotas;
-                dto.setTotalAPagar(totalAPagar);
-                valorFuturo = totalAPagar; // Usar total a pagar como valor futuro
-            }
-
-            // Calcular el interés solo si valorFuturo ha sido establecido
-            if (valorFuturo != 0.0) {
-                double interes = valorFuturo - subtotal;
-                dto.setInteres(interes);
-            }
-
-            histMovimientoDTOs.add(dto);
-        }
-
-        return histMovimientoDTOs;
-    }
-    public List<HistMovimientoDTO> consultaReporteCompraTodosClientes() {
-        List<Object[]> getReporteCompra = compraRepo.getReporteCompra();
-        List<HistMovimientoDTO> histMovimientoDTOs = new ArrayList<>();
-
-        for (Object[] result : getReporteCompra) {
-            HistMovimientoDTO dto = new HistMovimientoDTO();
-            dto.setNombrecompleto((String) result[0]);
-            LocalDate fechaCompra = ((Date) result[1]).toLocalDate();
-            dto.setFecha(fechaCompra);
-            dto.setDescripcion((String) result[2]);
-            double subtotal = ((Number) result[3]).doubleValue();
-            double tasa_num = ((Number) result[5]).doubleValue();
-            int cuotas = ((Number) result[6]).intValue();
-            int capitalizacion = ((Number) result[7]).intValue();
-            dto.setSubtotal(subtotal);
-            dto.setTasa_text((String) result[4]);
-            dto.setTasa_num(tasa_num);
-            dto.setCuotas(cuotas);
-            dto.setCapitalizacion(capitalizacion);
-
-            // Calcular el "Nº días trasladar"
-            // Aquí no tenemos el pago mensual del cliente, así que se necesita una forma estándar de calcularlo.
-            int diasTrasladar = calcularDiasTrasladar(fechaCompra, 30); // Ejemplo de pago mensual fijo en el día 30
-            dto.setDiasTrasladar(diasTrasladar);
-
-            // Inicializar valorFuturo
-            double valorFuturo = 0.0;
-
-            // Calcular el valor futuro dependiendo de la tasa y cuotas
-            if (cuotas == 1) {
-                valorFuturo = calcularValorFuturo(subtotal, tasa_num / 100, diasTrasladar, dto.getTasa_text(), capitalizacion);
-                dto.setValorFuturo(valorFuturo);
-            } else {
-                double tep;
-                if (dto.getTasa_text().equals("Nominal")) {
-                    // Convertir tasa nominal a tasa efectiva usando capitalización
-                    tep = calcularTEP(tasa_num / 100, 30 / capitalizacion);
-                } else {
-                    tep = tasa_num / 100;
-                }
-                double renta = calcularRenta(subtotal, tep, cuotas);
-                dto.setRenta(renta);
-                double totalAPagar = renta * cuotas;
-                dto.setTotalAPagar(totalAPagar);
-                valorFuturo = totalAPagar; // Usar total a pagar como valor futuro
-            }
-
-            // Calcular el interés solo si valorFuturo ha sido establecido
-            if (valorFuturo != 0.0) {
-                double interes = valorFuturo - subtotal;
-                dto.setInteres(interes);
-            }
-
-            histMovimientoDTOs.add(dto);
-        }
-
-        return histMovimientoDTOs;
-    }
-
-
 }

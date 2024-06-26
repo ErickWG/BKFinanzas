@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface HistMovimientoRepository extends JpaRepository<HistMovimiento, Integer> {
     List<HistMovimiento> findByClienteUserUsername(String username);
+
+    List<HistMovimiento> findByClienteId(Integer id);
 }
 
