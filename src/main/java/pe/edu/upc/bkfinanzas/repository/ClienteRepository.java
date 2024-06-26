@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente,Integer> {
     Optional<Cliente> findClienteByUser_Username (String username);
-
+    
 }
