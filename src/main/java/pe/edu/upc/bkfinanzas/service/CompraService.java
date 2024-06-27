@@ -145,6 +145,7 @@ public class CompraService {
         histMovimiento.setCliente(cliente);
         histMovimiento.setCompra(compra);
         histMovimiento.setEstado("Pendiente");
+        histMovimiento.setEstadopago("Pendiente"); // Añadir estadopago
         histMovimiento.setDiasTrasladar(diasTrasladar);
         histMovimiento.setRenta(renta);
         histMovimiento.setTotalAPagar(totalAPagar);

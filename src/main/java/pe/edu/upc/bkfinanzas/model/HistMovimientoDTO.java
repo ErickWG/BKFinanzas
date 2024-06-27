@@ -13,6 +13,40 @@ public class HistMovimientoDTO {
     public Integer cuotas;
     public Integer capitalizacion;
 
+
+    //AGREGADO PARA SOLUCIONAR UN TEMITA (2:30AM)
+    private Integer clienteId;
+
+    public Integer getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Integer clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public Integer getCompraId() {
+        return compraId;
+    }
+
+    public void setCompraId(Integer compraId) {
+        this.compraId = compraId;
+    }
+
+    private Integer compraId;
+
+    //AGREGADO PARA SOLUCIONAR UN TEMITA (2:30AM)
+
+    public String getEstadopago() {
+        return estadopago;
+    }
+
+    public void setEstadopago(String estadopago) {
+        this.estadopago = estadopago;
+    }
+
+    public String estadopago; // Nuevo campo agregado
+
     public Double getRenta() {
         return renta;
     }

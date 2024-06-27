@@ -27,6 +27,11 @@ public class HistMovimiento {
     private Integer cuotas;
     private Integer capitalizacion;
 
+    //estado de pago ()
+    private String estadopago = "Pendiente";
+
+
+
     @Column(nullable = true)
     private Double renta;
 

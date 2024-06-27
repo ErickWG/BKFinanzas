@@ -1,10 +1,12 @@
 package pe.edu.upc.bkfinanzas.service;
 
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.bkfinanzas.model.Compra;
 import pe.edu.upc.bkfinanzas.model.HistMovimiento;
 import pe.edu.upc.bkfinanzas.model.HistMovimientoDTO;
+import pe.edu.upc.bkfinanzas.model.Producto;
 import pe.edu.upc.bkfinanzas.repository.HistMovimientoRepository;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class HistMovimientoService {
     public List<HistMovimiento> lsHistorial() {
         return histMovimientoRepository.findAll();
     }
+
     public List<HistMovimiento> lsHistorialPorId(Integer id) {
         return histMovimientoRepository.findByClienteId(id);
     }
@@ -44,6 +47,18 @@ public class HistMovimientoService {
         dto.setTasa_num(histMovimiento.getTasa_num());
         dto.setCuotas(histMovimiento.getCuotas());
         dto.setCapitalizacion(histMovimiento.getCapitalizacion());
+        dto.setEstadopago(histMovimiento.getEstadopago()); // Incluyendo el campo estadopago
+        dto.setCompraId(histMovimiento.getCompra().getId());
+        dto.setClienteId(histMovimiento.getCliente().getId());
         return dto;
     }
+
+
+    //modificar
+    public HistMovimiento modifica (HistMovimiento histMovimiento) throws Exception{
+        HistMovimiento histmovi= histMovimientoRepository.findById(histMovimiento.getId())
+                .orElseThrow(() -> new OpenApiResourceNotFoundException("Id del producto no existe"));
+        return histMovimientoRepository.save(histMovimiento);
+    }
+
 }
