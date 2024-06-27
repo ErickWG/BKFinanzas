@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pe.edu.upc.bkfinanzas.BkFinanzasApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.11 s -- in pe.edu.upc.bkfinanzas.BkFinanzasApplicationTests
