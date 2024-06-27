@@ -11,7 +11,7 @@ import pe.edu.upc.bkfinanzas.service.UserService;
 
 @RestController
 @RequestMapping
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
     private final AuthService authService;
     private final UserService userService;
