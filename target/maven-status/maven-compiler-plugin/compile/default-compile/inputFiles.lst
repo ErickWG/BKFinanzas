@@ -1,42 +1,42 @@
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\UserController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\CompraRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\ProductoController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Role.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\ClienteService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\HistMovimientoRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\ApplicationConfig.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\CompraService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\model\RegisterRequest.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\ProductoRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\HistMovimientoController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\CompraDTO.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\TipoCredito.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\HistMovimientoDTO.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\AuthService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Compra.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\BkFinanzasApplication.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\TipoCreditoController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\model\AuthResponse.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\UserService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\CompraController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\TipoCreditoService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\DetalleCompraDTO.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\SecurityConfig.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Cliente.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\ProductoService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\ClienteController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\HistMovimiento.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\TipoCreditoDTO.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\DetalleCompraRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\util\CORS.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\AuthController.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Producto.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\UserRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\User.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\JwtAuthenticationFilter.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\model\LoginRequest.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\JwtService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\TipoCreditoRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\ClienteRepository.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\HistMovimientoService.java
-C:\Users\PC\Desktop\Intentos Progra\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\DetalleCompra.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\HistMovimientoRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\model\AuthResponse.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\UserRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\CompraDTO.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\UserController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Compra.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\HistMovimientoService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\JwtService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\UserService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Producto.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\CompraController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Role.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\ClienteController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\HistMovimientoDTO.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\BkFinanzasApplication.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\DetalleCompraDTO.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\util\CORS.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\TipoCreditoDTO.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\User.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\SecurityConfig.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\ProductoRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\JwtAuthenticationFilter.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\ClienteService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\TipoCreditoController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\Cliente.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\model\LoginRequest.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\TipoCredito.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\CompraService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\CompraRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\HistMovimientoController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\ProductoController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\model\RegisterRequest.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\AuthService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\controllers\AuthController.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\HistMovimiento.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\TipoCreditoRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\ClienteRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\security\ApplicationConfig.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\repository\DetalleCompraRepository.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\TipoCreditoService.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\model\DetalleCompra.java
+C:\Users\User\Desktop\Septimo Ciclo\Finanzas Cod\BKFinanzas\src\main\java\pe\edu\upc\bkfinanzas\service\ProductoService.java

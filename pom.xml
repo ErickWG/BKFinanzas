@@ -10,6 +10,7 @@
     </parent>
     <groupId>pe.edu.upc</groupId>
     <artifactId>BKFinanzas</artifactId>
+    <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>BKFinanzas</name>
