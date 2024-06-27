@@ -7,15 +7,18 @@ import pe.edu.upc.bkfinanzas.security.model.AuthResponse;
 import pe.edu.upc.bkfinanzas.security.model.LoginRequest;
 import pe.edu.upc.bkfinanzas.security.model.RegisterRequest;
 import pe.edu.upc.bkfinanzas.service.AuthService;
+import pe.edu.upc.bkfinanzas.service.UserService;
 
 @RestController
 @RequestMapping
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
     private final AuthService authService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     // Generan un token
@@ -33,5 +36,11 @@ public class AuthController {
     @GetMapping("/api/v1/show")
     public ResponseEntity<String> showDemo () {
         return new ResponseEntity<>("El token funciona correctamente uwu", HttpStatus.OK);
+    }
+
+    @GetMapping("/auth/check-dni/{dni}")
+    public ResponseEntity<Boolean> checkDniExists(@PathVariable String dni) {
+        boolean exists = userService.checkDniExists(dni);
+        return ResponseEntity.ok(exists);
     }
 }
