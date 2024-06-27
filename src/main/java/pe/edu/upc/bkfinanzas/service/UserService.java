@@ -16,7 +16,7 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    public List<User> listarUsuariosUSER(){return userRepository.findUSERS();}
+    public List<User> listarUsuariosUSER(){return userRepository.findAll();}
 
     public Optional<User> buscarPorUsername(String username){return userRepository.findByUsername(username);}
 
